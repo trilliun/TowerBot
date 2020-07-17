@@ -39,7 +39,7 @@ module.exports = {
         '$sample': {
           'size': 1
         }
-      }
+      },
     ]).exec((err, wisdomResult) => {
       if (err) {
         console.error(err);
@@ -51,6 +51,12 @@ module.exports = {
       //get one random image
       Image.aggregate([
         {
+          '$match': {
+            'tags': {
+              '$eq': 'peaceful'
+            }
+          }
+        }, {
           '$sample': {
             'size': 1
           }
