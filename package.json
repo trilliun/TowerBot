@@ -1,0 +1,21 @@
+{
+    "name": "TowerBot",
+    "version": "1.0.0",
+    "description": "A custom bot for Tower Club's discord server",
+    "main": "bot.js",
+    "author": "trilliun",
+    "dependencies": {
+        "@hapi/cryptiles": "^5.1.0",
+        "better-sqlite3": "^7.1.0",
+        "canvas": "^2.6.1",
+        "canvas-constructor": "^3.2.0",
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "discord.js": "^12.2.0",
+        "fs": "0.0.1-security",
+        "mongoose": "^5.9.24",
+        "node-gyp": "^7.0.0",
+        "python": "0.0.4",
+        "request": "^2.88.2",
+        "winston": "^3.2.1"
+    }
+}
