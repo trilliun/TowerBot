@@ -36,7 +36,7 @@ const db = mongoose
     useCreateIndex: true,
     useFindAndModify: false
   })
-  .then(() => console.log('DB connnection successful!'));  
+  .then(() => console.log('DB connection successful!'));  
 
 //log in
 client.login(config.token);
