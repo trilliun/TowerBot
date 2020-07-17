@@ -3,8 +3,8 @@
 
 ## Resources
 ### Fonts
-- [HelloMornin](https://www.fontspace.com/azet-media-co)
 - [Bebas](http://bebasfont.com/)
+- [Rock Bottom](https://www.creativefabrica.com/product/rock-bottom/ref/235713/)
 
 ### Images
 - [Pexels](https://www.pexels.com/)
