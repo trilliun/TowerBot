@@ -1,0 +1,6 @@
+{
+    "token": "discordBotTokenString",
+    "mongoUri": "mongodb+srv://username:<password>@clusterName.mongodb.net/dbName",
+    "prefix": "!tb",
+    "ownerID": "discordUsername#0000"
+  }
