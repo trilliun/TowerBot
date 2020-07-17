@@ -29,7 +29,7 @@ fs.readdir("./commands/", (err, files) => {
 console.log(`Loaded commands`);
 
 //connect to database
-const db = mongoose
+mongoose
   .connect(config.mongoUri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
