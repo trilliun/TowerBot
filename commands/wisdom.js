@@ -5,6 +5,7 @@ const Canvas = require('canvas');
 const { registerFont, createCanvas } = require('canvas');
 registerFont('HelloMornin.otf', { family: 'HelloMornin' });
 registerFont('Bebas-Regular.otf', {family: 'Bebas'});
+
 mongoose.connect(config.mongoUri, { useNewUrlParser: true }, err => {
   if (err) console.error(err);
   console.log(mongoose);
@@ -70,17 +71,28 @@ module.exports = {
           return message.reply('Sorry, an error loading the image has occurred!');
         }
 
-        var img = imgResult[0];
+        var bg = imgResult[0];
 
         //begin creating motivational image
         let canvasHeight = Number(wisdom.quote.length) * 5;
         const canvas = Canvas.createCanvas(700, canvasHeight);
         const context = canvas.getContext('2d');
-        const background = await Canvas.loadImage(img.data); //use the image retrieved earlier
-        context.drawImage(background, 0, 0, canvas.width, canvas.height);
+        const img = await Canvas.loadImage(bg.data); //use the image retrieved earlier        
+
+        // get the scale
+        var scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        // get the top left position of the image
+        var x = (canvas.width / 2) - (img.width / 2) * scale;
+        var y = (canvas.height / 2) - (img.height / 2) * scale;
+        context.drawImage(img, x, y, img.width * scale, img.height * scale);
 
         context.fillStyle = "rgba(0,0,0, 0.6)"; //add transparent overlay
         context.fillRect(0, 0, canvas.width, canvas.height);
+
+        //add a border
+        context.strokeStyle = '#777';  
+        context.lineWidth = 10;
+        context.strokeRect(0, 0, canvas.width, canvas.height);
 
         //determine font metrics
         var maxWidth = 500;
@@ -90,6 +102,7 @@ module.exports = {
         context.font = '32pt Bebas';
         context.fillStyle = '#FFF';
         wrapText(context, `"${wisdom.quote}"`, x, y, maxWidth, lineHeight);
+        
         //add a line giving credit to author
         context.font = '26pt HelloMornin';
         context.fillStyle = '#DDD';
