@@ -2,6 +2,9 @@ const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const config = require('../config.json');
 const Canvas = require('canvas');
+const { registerFont, createCanvas } = require('canvas');
+registerFont('HelloMornin.otf', { family: 'HelloMornin' });
+registerFont('Bebas-Regular.otf', {family: 'Bebas'});
 mongoose.connect(config.mongoUri, { useNewUrlParser: true }, err => {
   if (err) console.error(err);
   console.log(mongoose);
@@ -81,14 +84,16 @@ module.exports = {
 
         //determine font metrics
         var maxWidth = 500;
-        var lineHeight = 28 * 1.5;
+        var lineHeight = 32 * 1.5;
         var x = (canvas.width - maxWidth) / 2;
         var y = 60;
-        context.font = 'italic 28pt century gothic';
+        context.font = '32pt Bebas';
         context.fillStyle = '#FFF';
         wrapText(context, `"${wisdom.quote}"`, x, y, maxWidth, lineHeight);
         //add a line giving credit to author
-        context.fillText(`-${wisdom.author}`, canvas.width / 2, canvas.height - 40);
+        context.font = '26pt HelloMornin';
+        context.fillStyle = '#DDD';
+        context.fillText(`-${wisdom.author}`, canvas.width / 1.5, canvas.height - 45);
 
         const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'wisdom.png');
 
