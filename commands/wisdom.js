@@ -4,7 +4,7 @@ const config = require('../config.json');
 const Canvas = require('canvas');
 const { registerFont, createCanvas } = require('canvas');
 registerFont('HelloMornin.otf', { family: 'HelloMornin' });
-registerFont('Bebas-Regular.otf', {family: 'Bebas'});
+registerFont('Bebas-Regular.otf', { family: 'Bebas' });
 
 mongoose.connect(config.mongoUri, { useNewUrlParser: true }, err => {
   if (err) console.error(err);
@@ -90,7 +90,7 @@ module.exports = {
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         //add a border
-        context.strokeStyle = '#777';  
+        context.strokeStyle = '#777';
         context.lineWidth = 10;
         context.strokeRect(0, 0, canvas.width, canvas.height);
 
@@ -102,7 +102,7 @@ module.exports = {
         context.font = '32pt Bebas';
         context.fillStyle = '#FFF';
         wrapText(context, `"${wisdom.quote}"`, x, y, maxWidth, lineHeight);
-        
+
         //add a line giving credit to author
         context.font = '26pt HelloMornin';
         context.fillStyle = '#DDD';
