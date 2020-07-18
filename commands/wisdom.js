@@ -1,16 +1,8 @@
 const Discord = require('discord.js');
-const mongoose = require('mongoose');
-const config = require('../config.json');
 const Canvas = require('canvas');
 const { registerFont, createCanvas } = require('canvas');
-registerFont('./resources/HelloMornin.otf', { family: 'HelloMornin' });
 registerFont('./resources/Bebas-Regular.otf', { family: 'Bebas' });
 registerFont('./resources/RockBottom.ttf', { family: 'RockBottom' });
-
-mongoose.connect(config.mongoUri, { useNewUrlParser: true }, err => {
-  if (err) console.error(err);
-  console.log(mongoose);
-});
 const Wisdom = require('../models/wisdom.js');
 const Image = require('../models/image.js');
 
