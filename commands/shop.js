@@ -5,7 +5,7 @@ const config = require('../config.json');
 const paginationEmbed = require('discord.js-pagination');
 
 const createEmbed = (message) => {
-    const description = `Use command \`${config.prefix} buy [quantity] <item-name (or shortcode)>\` to purchase an item from the shop.\n${'༞'.padEnd(35, '༞')}`;
+    const description = `Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.\n${'༞'.padEnd(35, '༞')}`;
     const color = '#DA70D6';
 
     return new Discord.MessageEmbed()
