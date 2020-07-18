@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Item = require('../models/item.js');
 const utility = require('../utility.js');
+const config = require('../config.json');
 
 module.exports = {
     name: 'shop',
@@ -11,7 +12,8 @@ module.exports = {
         const shopEmbed = new Discord.MessageEmbed();
         shopEmbed
             .setColor('#DA70D6')
-            .setAuthor(`${message.guild.name} Shop`, message.guild.iconURL());
+            .setAuthor(`${message.guild.name} Shop`, message.guild.iconURL())
+            .setDescription(`Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.`);
 
         //get items from database
         Item.find().exec((err, itemsQuery) => {

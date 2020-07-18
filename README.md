@@ -13,3 +13,6 @@
 ## Commands
 ### Fun
 `pickup` `wisdom`
+
+### Economy
+`shop`
