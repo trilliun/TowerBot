@@ -13,7 +13,7 @@ module.exports = {
         shopEmbed
             .setColor('#DA70D6')
             .setAuthor(`${message.guild.name} Shop`, message.guild.iconURL())
-            .setDescription(`Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.`);
+            .setDescription(`Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.\n${'༞'.padEnd(35, '༞')}`);
 
         //get items from database
         Item.find().exec((err, itemsQuery) => {
