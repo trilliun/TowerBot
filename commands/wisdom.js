@@ -64,13 +64,16 @@ module.exports = {
           return message.reply('Sorry, an error loading the image has occurred!');
         }
 
-        var bg = imgResult[0];
+        var bg = await imgResult;
+        if (bg.uri == undefined) {
+          return message.reply('There was an error retrieving a background iamge for your wisdom!');
+        }
 
         //begin creating motivational image
         let canvasHeight = Number(wisdom.quote.length) * 5;
         const canvas = Canvas.createCanvas(700, canvasHeight);
         const context = canvas.getContext('2d');
-        const img = await Canvas.loadImage(bg.data); //use the image retrieved earlier        
+        const img = await Canvas.loadImage(bg.uri.toString()); //use the image retrieved earlier        
 
         // get the scale
         var scale = Math.max(canvas.width / img.width, canvas.height / img.height);
