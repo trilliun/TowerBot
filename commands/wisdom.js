@@ -64,10 +64,7 @@ module.exports = {
           return message.reply('Sorry, an error loading the image has occurred!');
         }
 
-        var bg = await imgResult;
-        if (bg.uri == undefined) {
-          return message.reply('There was an error retrieving a background iamge for your wisdom!');
-        }
+        var bg = imgResult[0];
 
         //begin creating motivational image
         let canvasHeight = Number(wisdom.quote.length) * 5;
