@@ -1,5 +1,5 @@
 const User = require('./models/user.js');
-
+const PlayerLevel = require('./models/playerLevel.js');
 
 module.exports = {
     getEmoji(id, client) {
@@ -7,16 +7,22 @@ module.exports = {
     },
 
     async findOrCreateUserByDiscordId(id) {
-        let userResult = User.findOne({ 'userId': id }).catch(err => console.log(error));
-
+        let userResult = await User.findOne({ 'userId': id }).catch(err => console.log(err));
         if (userResult == null || userResult == undefined) {
-            userResult = User.create({
+        let levelInfo = await PlayerLevel.findOne({level: { $eq: '1' }}).catch(err => console.log(err));
+        userResult = await User.create({
                 userId: id,
-                inventory: []
+                inventory: [],
+                equipment: [],
+                stats: {
+                    hp: levelInfo.hp,
+                    energy: levelInfo.energy,
+                    stamina: levelInfo.stamina
+                }
             }).catch(err => console.log(err));
         }
 
-        return await userResult;
+        return userResult;
     },
 
     getCurrencyString(cost, client) {

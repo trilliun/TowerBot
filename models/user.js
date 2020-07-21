@@ -11,7 +11,18 @@ const userSchema = mongoose.Schema({
     inventory: [{
         item: mongoose.Types.ObjectId,
         quantity: Number
-    }]
+    }],
+    equipment: [{
+        item: mongoose.Types.ObjectId,
+        quantity: Number
+    }],
+    stats: {
+        hp: Number,
+        energy: Number,
+        stamina: Number,
+        armor: { type: Number, default: 0 },
+        exp: { type: Number, default: 0 }
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);
