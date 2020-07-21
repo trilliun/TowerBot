@@ -6,25 +6,6 @@ module.exports = {
         return client.emojis.cache.find(emoji => emoji.name === id);
     },
 
-    async findOrCreateUserByDiscordId(id) {
-        let userResult = await User.findOne({ 'userId': id }).catch(err => console.log(err));
-        if (userResult == null || userResult == undefined) {
-        let levelInfo = await PlayerLevel.findOne({level: { $eq: '1' }}).catch(err => console.log(err));
-        userResult = await User.create({
-                userId: id,
-                inventory: [],
-                equipment: [],
-                stats: {
-                    hp: levelInfo.hp,
-                    energy: levelInfo.energy,
-                    stamina: levelInfo.stamina
-                }
-            }).catch(err => console.log(err));
-        }
-
-        return userResult;
-    },
-
     getCurrencyString(cost, client) {
         let amt = Number(cost);
         let remainder = 0;
