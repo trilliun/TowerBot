@@ -18,8 +18,8 @@ module.exports = {
     description: 'displays a list of items available in the general shop',
     async execute(client, message, args) {
         const pages = [];
-        const user = await User.findOne({'userId': message.author.id});
-        if (user == null || user == undefined || user.currency == 0) {
+         //find or create user profile
+        let user = await utility.findOrCreateUserByDiscordId(message.author.id);
             var spend = '**no money**';
         } else {
             var spend = utility.getCurrencyString(user.currency, client);
