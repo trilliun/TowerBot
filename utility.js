@@ -1,5 +1,8 @@
+const mongoose = require('mongoose');
+const Canvas = require('canvas');
 const User = require('./models/user.js');
 const PlayerLevel = require('./models/playerLevel.js');
+const CharacterComponent = require('./models/characterComponent.js');
 
 module.exports = {
     getEmoji(id, client) {
@@ -42,5 +45,10 @@ module.exports = {
         }
 
         return currencyString.join(' ');
+    },
+
+    async getAvatarComponentUri(componentId, gender) {
+        let component = await CharacterComponent.findOne({ _id: componentId }).catch(err => console.log(err));
+        return component.uri[gender].toString();
     }
 }
