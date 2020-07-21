@@ -1,4 +1,9 @@
-module.exports = (client, message) => {
+const utility = require('../utility.js');
+const User = require('../models/user.js');
+const PlayerLevel = require('../models/playerLevel.js');
+let user = null;
+
+module.exports = async (client, message) => {
   // Ignore all bots
   if (message.author.bot) return;
 
@@ -25,10 +30,27 @@ module.exports = (client, message) => {
 
     return message.channel.send(reply);
   }
-
   try {
-    console.log(`running command ${command.name}`);
-    command.execute(client, message, args);
+    if (user == null || user == undefined) {
+      //find or create user profile
+      let userResult = await User.findOne({ 'userId': message.author.id }).catch(err => console.log(err));
+      if (userResult == null || userResult == undefined) {
+        let levelInfo = await PlayerLevel.findOne({ level: { $eq: '1' } }).catch(err => console.log(err));
+        userResult = await User.create({
+          userId: message.author.id,
+          inventory: [],
+          stats: {
+            hp: levelInfo.hp,
+            energy: levelInfo.energy,
+            stamina: levelInfo.stamina
+          }
+        }).catch(err => console.log(err));
+      }
+      user = await userResult;
+    }
+
+    console.log(`running command =${command.name}= for =${message.author.username}=`);
+    command.execute(client, user, message, args);
   }
   catch (error) {
     console.error(error);

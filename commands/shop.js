@@ -16,10 +16,9 @@ const createEmbed = (message) => {
 module.exports = {
     name: 'shop',
     description: 'displays a list of items available in the general shop',
-    async execute(client, message, args) {
+    async execute(client, user, message, args) {
         const pages = [];
          //find or create user profile
-        let user = await utility.findOrCreateUserByDiscordId(message.author.id);
         if (user.currency == 0) {
             var spend = '**no money**';
         } else {

@@ -9,10 +9,7 @@ registerFont('./resources/ST01R.ttf', { family: 'ST01R' });
 module.exports = {
     name: 'profile',
     description: 'gets a user\'s profile',
-    async execute(client, message, args) {
-
-        //find or create user profile
-        let user = await utility.findOrCreateUserByDiscordId(message.author.id);
+    async execute(client, user, message, args) {
 
         //start by creating the canvas
         const canvas = Canvas.createCanvas(250, 300);
