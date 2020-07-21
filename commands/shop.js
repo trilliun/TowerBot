@@ -20,15 +20,16 @@ module.exports = {
         const pages = [];
          //find or create user profile
         let user = await utility.findOrCreateUserByDiscordId(message.author.id);
+        if (user.currency == 0) {
             var spend = '**no money**';
         } else {
             var spend = utility.getCurrencyString(user.currency, client);
         }
         
-        var shopDescription = `Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.\nYou currently has ${spend} to spend.\n${'༞'.padEnd(35, '༞')}`;
+        var shopDescription = `Use command \`${config.prefix} buy [quantity] <item-name>\` to purchase an item from the shop.\n<@${message.author.id}> currently has ${spend} to spend.\n${'༞'.padEnd(35, '༞')}`;
 
         //get common items from database
-        Item.find().exec(async (err, itemsQuery) => {
+        Item.find({$or: [{'rarity': 'common'}, {'rarity': 'uncommon'}]}).exec(async (err, itemsQuery) => {
             let itemGroups = new Map();
 
             itemsQuery.forEach(i => {
