@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const Canvas = require('canvas');
 const utility = require('../utility.js');
 const Image = require('../models/image.js');
+const CharacterComponent = require('../models/characterComponent.js');
 const { registerFont, createCanvas } = require('canvas');
 registerFont('./resources/VeniceClassic.ttf', { family: 'VeniceClassic' });
 registerFont('./resources/ST01R.ttf', { family: 'ST01R' });
@@ -16,32 +17,33 @@ module.exports = {
         const context = canvas.getContext('2d');
 
         //get character profile background iamge
-        let bgImg = await Image.findOne({ _id: user.profileBackground });
-        if (bgImg == null || bgImg == undefined) {
-            //use some default img
-        } else {
-            const bg = await Canvas.loadImage(bgImg.uri.toString());
-            context.drawImage(bg, 0, 0, canvas.width, canvas.height);
+        let bgImg = await Image.findOne({ _id: user.avatar.backgroundImg });
+        const bg = await Canvas.loadImage(bgImg.uri.toString());
+        context.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
-            //add a transparent overlay so the character can be seen better
-            context.fillStyle = "rgba(0,0,0, 0.6)";
-            context.fillRect(0, 0, canvas.width, canvas.height);
+        //add a transparent overlay so the character can be seen better
+        context.fillStyle = "rgba(0,0,0, 0.6)";
+        context.fillRect(0, 0, canvas.width, canvas.height);
 
-            //add a border
-            context.strokeStyle = '#c09141';
-            context.lineWidth = 4;
-            context.strokeRect(0, 0, canvas.width, canvas.height);
-        }
+        //add a border
+        context.strokeStyle = '#c09141';
+        context.lineWidth = 4;
+        context.strokeRect(0, 0, canvas.width, canvas.height);
 
         //draw character art
-        const characterBase = await Canvas.loadImage('https://i.imgur.com/1nam7wa.png');
-        context.drawImage(characterBase, 0, 0, canvas.width, canvas.height);
+        let characterBaseUri = await utility.getAvatarComponentUri(user.avatar.avatarBase, user.avatar.gender);
+        var characterBaseImg = await Canvas.loadImage(characterBaseUri);      
+        context.drawImage(characterBaseImg, 0, 0, canvas.width, canvas.height);
+
         //apply hair
-        const hair = await Canvas.loadImage('https://i.imgur.com/Z1br4sg.png');
-        context.drawImage(hair, 0, 0, canvas.width, canvas.height);
-        //apply avatar equipment
-        const outfit = await Canvas.loadImage('https://i.imgur.com/6Nq3RF3.png');
-        context.drawImage(outfit, 0, 0, canvas.width, canvas.height);
+        let hairImgUri = await utility.getAvatarComponentUri(user.avatar.hair, user.avatar.gender);
+        var hairImg = await Canvas.loadImage(hairImgUri);      
+        context.drawImage(hairImg, 0, 0, canvas.width, canvas.height);
+
+        //apply undergarments
+        let underwearImgUri = await utility.getAvatarComponentUri(user.avatar.underwear, user.avatar.gender);
+        var underwearImg = await Canvas.loadImage(underwearImgUri);      
+        context.drawImage(underwearImg, 0, 0, canvas.width, canvas.height);
 
         //add UI elements
         const equipmentSlots = await Canvas.loadImage('https://i.imgur.com/xHt9PlG.png');
