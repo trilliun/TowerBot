@@ -4,15 +4,20 @@
 ## Resources
 ### Fonts
 - [Bebas](http://bebasfont.com/)
-- [Rock Bottom](https://www.creativefabrica.com/product/rock-bottom/ref/235713/)
+- [Venice Classic by soixantedeux](https://www.dafont.com/venice-classic.font)
 
 ### Images
 - [Pexels](https://www.pexels.com/)
-- Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com/)
+- Icons made by [Dharu Ghazi](https://ghazi.itch.io/fantasy-icon-pack)
 
 ## Commands
 ### Fun
 `pickup` `wisdom`
 
-### Economy
+### General
+`profile`
+
+### RPG
 `shop`
+
+### Economy
