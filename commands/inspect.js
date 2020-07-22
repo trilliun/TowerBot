@@ -6,7 +6,7 @@ module.exports = {
     name: 'inspect',
     description: 'displays the details and effects of an item',
     aliases: ['i'],
-    usage: ['[item]'],
+    usage: ['item'],
     cooldown: 5,
     async execute(client, user, message, args) {
         if (args && args.length > 0) {
