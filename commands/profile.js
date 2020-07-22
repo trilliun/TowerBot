@@ -20,33 +20,16 @@ module.exports = {
                     message.reply(`Command format is as follows: \`${config.prefix} profile set [gender|skin|background]\`.`);
                     break;
                 case 'gender':
-                    let filter = m => ['y','n','no','yes'].includes(m.content.toLowerCase());
-                    message.channel.send('Are you sure you want to change genders? [y/n]').then(() => {
-                        message.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ['time'] })
-                        .then(async collected => {
-                            switch (collected.first().content.toLowerCase()) {
-                                case 'y':
-                                case 'yes':
-                                    user.avatar.gender = user.avatar.gender == 0 ? 1 : 0;
-                                    await user.save(err => console.log(err));
-                                    message.reply('Profile change saved.');
-                                    return;
-                                case 'n':
-                                case 'no':
-                                default:
-                                    message.reply('Cancelling command.');
-                                    return;
-                            }
-                        })
-                        .catch(collected => {
-                            //
-                        });
-                    });
+                    handleGenderChangePrompt(message, user);
                     break;
                 case 'skin':
+                    handleSkintoneChangePrompt(message, user);
+                    break;
                 case 'background':
+                    message.reply('Sorry, not implemented yet, check back later!');
+                    break;
                 default:
-                    message.reply('Invalid argument, canceling command.')
+                    message.reply('Invalid argument, cancelling command.')
             }
             return;
         };
@@ -101,3 +84,53 @@ module.exports = {
         message.channel.send(attachment);
     }
 };
+
+function handleGenderChangePrompt(message, user) {
+    let genderConfirmationFilter = m => ['y', 'n', 'no', 'yes'].includes(m.content.toLowerCase());
+    message.channel.send('Are you sure you want to change genders? **[y/n]**').then(() => {
+        message.channel.awaitMessages(genderConfirmationFilter, { max: 1, time: 30000, errors: ['time'] })
+            .then(async collected => {
+                switch (collected.first().content.toLowerCase()) {
+                    case 'y':
+                    case 'yes':
+                        user.avatar.gender = user.avatar.gender == 0 ? 1 : 0;
+                        await user.save(err => console.log(err));
+                        message.reply('Profile change saved.');
+                        return;
+                    case 'n':
+                    case 'no':
+                    default:
+                        message.reply('Cancelling command.');
+                        return;
+                }
+            })
+    });
+}
+
+function handleSkintoneChangePrompt(message, user) {
+    CharacterComponent.find({ 'component': { $eq: 'base' } }).exec((err, options) => {
+        let str = [];
+        let filterArray = [];
+        options.forEach(option => {
+            let currentIndex = options.indexOf(option);
+            filterArray.push(currentIndex);
+            str.push(`**${currentIndex}** \`${option.description}\``);
+        });
+        let skinToneChoiceFilter = m => filterArray.includes(Number(m.content));
+        message.channel.send('Below are the options available. Please select the number for the option you\'d prefer.\n' + str.join('\n')).then(() => {
+            message.channel.awaitMessages(skinToneChoiceFilter, { max: 1, time: 30000, errors: ['time'] })
+                .then(async collected => {
+                    let index = Number(collected.first().content);
+                    if (index == undefined || index == null || index >= options.length) {
+                        message.reply('Invalid choice. Cancelling command.');
+                        return;
+                    } else {
+                        user.avatar.avatarBase = options[index].id;
+                        await user.save(err => console.log(err));
+                        message.reply('Profile change saved.');
+                        return;
+                    }
+                })
+        })
+    });
+}

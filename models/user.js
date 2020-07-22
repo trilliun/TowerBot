@@ -32,7 +32,8 @@ const userSchema = mongoose.Schema({
         energy: Number,
         stamina: Number,
         armor: { type: Number, default: 0 },
-        exp: { type: Number, default: 0 }
+        exp: { type: Number, default: 0 },
+        luck: { type: Number, default: 0 }
     }
 });
 
