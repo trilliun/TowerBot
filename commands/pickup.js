@@ -2,7 +2,10 @@ const Discord = require('discord.js');
 
 module.exports = {
   name: 'pickup',
+  aliases: ['pu', 'pul'],
   description: 'generates a random pickup line for a user',
+  usage: '[optional: @user]',
+  cooldown: 5,
   execute(client, user, message, args) {
     let pickupLines = [
       "Well, here I am. What are your other two wishes?",

@@ -10,7 +10,10 @@ registerFont('./resources/ST01R.ttf', { family: 'ST01R' });
 
 module.exports = {
     name: 'profile',
+    aliases: ['avatar', 'char', 'character'],
     description: 'retrieve or edit a user\'s profile',
+    usage: '[optional: set gender|skin|background]',
+    cooldown: 10,
     async execute(client, user, message, args) {
 
         if (args && args[0] == 'set') {

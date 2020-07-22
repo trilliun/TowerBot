@@ -16,6 +16,7 @@ const createEmbed = (message) => {
 module.exports = {
     name: 'shop',
     description: 'displays a list of items available in the general shop',
+    cooldown: 5,
     async execute(client, user, message, args) {
         const pages = [];
          //find or create user profile

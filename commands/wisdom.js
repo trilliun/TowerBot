@@ -27,7 +27,10 @@ const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
 
 module.exports = {
   name: 'wisdom',
+  aliases: ['wm', 'wis'],
   description: 'generates a random bit of wisdom for the user',
+  usage: '[optional: @user]',
+  cooldown: 5,
   execute(client, message, args) {
 
     //get one random wisdom
