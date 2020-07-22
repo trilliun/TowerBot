@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const Canvas = require('canvas');
 const utility = require('../utility.js');
 const Image = require('../models/image.js');
+const config = require('../config.json');
 const CharacterComponent = require('../models/characterComponent.js');
 const { registerFont, createCanvas } = require('canvas');
 registerFont('./resources/VeniceClassic.ttf', { family: 'VeniceClassic' });
@@ -9,8 +10,46 @@ registerFont('./resources/ST01R.ttf', { family: 'ST01R' });
 
 module.exports = {
     name: 'profile',
-    description: 'gets a user\'s profile',
+    description: 'retrieve or edit a user\'s profile',
     async execute(client, user, message, args) {
+
+        if (args && args[0] == 'set') {
+            switch (args[1]) {
+                case null:
+                case undefined:
+                    message.reply(`Command format is as follows: \`${config.prefix} profile set [gender|skin|background]\`.`);
+                    break;
+                case 'gender':
+                    let filter = m => ['y','n','no','yes'].includes(m.content.toLowerCase());
+                    message.channel.send('Are you sure you want to change genders? [y/n]').then(() => {
+                        message.channel.awaitMessages(filter, { max: 1, time: 30000, errors: ['time'] })
+                        .then(async collected => {
+                            switch (collected.first().content.toLowerCase()) {
+                                case 'y':
+                                case 'yes':
+                                    user.avatar.gender = user.avatar.gender == 0 ? 1 : 0;
+                                    await user.save(err => console.log(err));
+                                    message.reply('Profile change saved.');
+                                    return;
+                                case 'n':
+                                case 'no':
+                                default:
+                                    message.reply('Cancelling command.');
+                                    return;
+                            }
+                        })
+                        .catch(collected => {
+                            //
+                        });
+                    });
+                    break;
+                case 'skin':
+                case 'background':
+                default:
+                    message.reply('Invalid argument, canceling command.')
+            }
+            return;
+        };
 
         //start by creating the canvas
         const canvas = Canvas.createCanvas(250, 300);
@@ -32,17 +71,17 @@ module.exports = {
 
         //draw character art
         let characterBaseUri = await utility.getAvatarComponentUri(user.avatar.avatarBase, user.avatar.gender);
-        var characterBaseImg = await Canvas.loadImage(characterBaseUri);      
+        var characterBaseImg = await Canvas.loadImage(characterBaseUri);
         context.drawImage(characterBaseImg, 0, 0, canvas.width, canvas.height);
 
         //apply hair
         let hairImgUri = await utility.getAvatarComponentUri(user.avatar.hair, user.avatar.gender);
-        var hairImg = await Canvas.loadImage(hairImgUri);      
+        var hairImg = await Canvas.loadImage(hairImgUri);
         context.drawImage(hairImg, 0, 0, canvas.width, canvas.height);
 
         //apply undergarments
         let underwearImgUri = await utility.getAvatarComponentUri(user.avatar.underwear, user.avatar.gender);
-        var underwearImg = await Canvas.loadImage(underwearImgUri);      
+        var underwearImg = await Canvas.loadImage(underwearImgUri);
         context.drawImage(underwearImg, 0, 0, canvas.width, canvas.height);
 
         //add UI elements

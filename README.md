@@ -15,7 +15,7 @@
 `pickup` `wisdom`
 
 ### General
-`profile`
+`profile` `profile set [gender|skin|background]`
 
 ### RPG
 `shop`

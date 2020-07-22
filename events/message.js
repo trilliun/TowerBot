@@ -33,11 +33,11 @@ module.exports = async (client, message) => {
   try {
     if (user == null || user == undefined) {
       //find or create user profile
-      let userResult = await User.findOne({ 'userId': message.author.id }).catch(err => console.log(err));
+      let userResult = await User.findOne({ 'discordId': message.author.id }).catch(err => console.log(err));
       if (userResult == null || userResult == undefined) {
         let levelInfo = await PlayerLevel.findOne({ level: { $eq: '1' } }).catch(err => console.log(err));
         userResult = await User.create({
-          userId: message.author.id,
+          discordId: message.author.id,
           inventory: [],
           stats: {
             hp: levelInfo.hp,
