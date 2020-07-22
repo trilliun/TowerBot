@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
-const Canvas = require('canvas');
-const User = require('./models/user.js');
-const PlayerLevel = require('./models/playerLevel.js');
 const CharacterComponent = require('./models/characterComponent.js');
 
 module.exports = {
-    getEmoji(id, client) {
-        return client.emojis.cache.find(emoji => emoji.name === id);
+    getEmojiId(term, client) {
+        return client.emojis.cache.find(emoji => emoji.name === term);
+    },
+
+    getEmojiUri(id) {
+        return `https://cdn.discordapp.com/emojis/${id}.png`
     },
 
     getCurrencyString(cost, client) {

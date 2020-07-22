@@ -55,7 +55,7 @@ module.exports = {
 
                 //for each item in the category
                 itemGroup.forEach(groupItem => {
-                    var itemIcon = utility.getEmoji(groupItem.icon, client);
+                    var itemIcon = utility.getEmojiId(groupItem.icon, client);
                     let currencyString = utility.getCurrencyString(groupItem.cost, client);
                     if (groupItem.description) {
                         var desc = groupItem.description;
