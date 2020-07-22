@@ -7,8 +7,9 @@
 - [Venice Classic by soixantedeux](https://www.dafont.com/venice-classic.font)
 
 ### Images
-- [Pexels](https://www.pexels.com/)
+- Background photos for wisdom command from [Pexels](https://www.pexels.com/)
 - Icons made by [Dharu Ghazi](https://ghazi.itch.io/fantasy-icon-pack)
+- Pixel avatar model based off assets made by [Kawaii Hannah](https://www.kawaiihannah.com/pixelart/dollbases/)
 
 ## Commands
 ### Fun
