@@ -27,6 +27,4 @@ Inspiration for monsters, stats, etc. taken from [Dungeons & Dragons 5e](https:/
 `profile` `profile set [gender|skin|background]`
 
 ### RPG
-`shop`
-
-### Economy
+`shop` `inspect`
