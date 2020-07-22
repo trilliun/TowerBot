@@ -17,6 +17,6 @@
         "node-gyp": "^7.0.0",
         "python": "0.0.4",
         "request": "^2.88.2",
-        "winston": "^3.2.1"
+        "winston": "^3.3.3"
     }
 }

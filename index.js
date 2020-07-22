@@ -2,10 +2,18 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const mongoose = require('mongoose');
+const winston = require('winston');
 const config = require("./config.json");
 
 const client = new Discord.Client();
 client.config = config;
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'log' }),
+  ],
+  format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`),
+});
 
 //load up listeners and events
 fs.readdir("./events/", (err, files) => {
@@ -36,7 +44,15 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false
   })
-  .then(() => console.log('DB connection successful!'));    
+  .then(() => console.log('DB connection successful!'));
+
+//begin collecting logs
+client.on('ready', () => logger.log('info', 'The bot is online!'));
+client.on('debug', m => logger.log('debug', m));
+client.on('warn', m => logger.log('warn', m));
+client.on('error', m => logger.log('error', m));
+
+process.on('uncaughtException', error => logger.log('error', error));
 
 //log in
 client.login(config.token);
