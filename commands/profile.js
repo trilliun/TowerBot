@@ -26,7 +26,7 @@ module.exports = {
                     handleSkintoneChangePrompt(message, user);
                     break;
                 case 'background':
-                    message.reply('Sorry, not implemented yet, check back later!');
+                    handleBackgroundChangePrompt(message, user);
                     break;
                 default:
                     message.reply('Invalid argument, cancelling command.')
@@ -126,6 +126,34 @@ function handleSkintoneChangePrompt(message, user) {
                         return;
                     } else {
                         user.avatar.avatarBase = options[index].id;
+                        await user.save(err => console.log(err));
+                        message.reply('Profile change saved.');
+                        return;
+                    }
+                })
+        })
+    });
+}
+
+function handleBackgroundChangePrompt(message, user) {
+    Image.find({ 'tags': { $eq: 'backgrounds' } }).exec((err, backgrounds) => {
+        let str = [];
+        let filterArray = [];
+        backgrounds.forEach(option => {
+            let currentIndex = backgrounds.indexOf(option);
+            filterArray.push(currentIndex);
+            str.push(`**${currentIndex}** \`${option.description}\``);
+        });
+        let backgroundChoiceFilter = m => filterArray.includes(Number(m.content));
+        message.channel.send('Below are the options available. Please select the number for the option you\'d prefer.\n' + str.join('\n')).then(() => {
+            message.channel.awaitMessages(backgroundChoiceFilter, { max: 1, time: 30000, errors: ['time'] })
+                .then(async collected => {
+                    let index = Number(collected.first().content);
+                    if (index == undefined || index == null || index >= backgrounds.length) {
+                        message.reply('Invalid choice. Cancelling command.');
+                        return;
+                    } else {
+                        user.avatar.backgroundImg = backgrounds[index].id;
                         await user.save(err => console.log(err));
                         message.reply('Profile change saved.');
                         return;
