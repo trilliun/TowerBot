@@ -4,7 +4,7 @@ const creatureSchema = mongoose.Schema({
     name: String,
     hp: {
         dieCount: Number,
-        dieType: String,
+        dieSides: Number,
         modifier: Number
     },
     armor: Number,
@@ -12,7 +12,7 @@ const creatureSchema = mongoose.Schema({
     dmg: [{
         description: String,
         dieCount: Number,
-        dieType: String,
+        dieSides: Number,
         modifier: Number
     }],
     staminaCost: Number
