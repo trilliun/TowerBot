@@ -50,5 +50,9 @@ module.exports = {
     async getAvatarComponentUri(componentId, gender) {
         let component = await CharacterComponent.findOne({ _id: componentId }).catch(err => console.log(err));
         return component.uri[gender].toString();
-    }
+    },
+
+    getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
 }
