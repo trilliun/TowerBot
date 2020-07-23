@@ -1,4 +1,4 @@
-const utility = require('../utility.js')
+const config = require('../config.js')
 const User = require('../models/user.js')
 const PlayerLevel = require('../models/playerLevel.js')
 const Discord = require('discord.js')
