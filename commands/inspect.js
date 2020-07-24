@@ -1,3 +1,4 @@
+const config = require('../config.json')
 const Discord = require('Discord.js')
 const Item = require('../models/item.js')
 const utility = require('../utility.js')
@@ -11,13 +12,17 @@ module.exports = {
   async execute (client, user, message, args) {
     if (args && args.length > 0) {
       const query = await Item.find({ name: { $regex: args.join(' ') } }).catch(err => console.log(err))
+      const inspectableItems = []
+      query.map(i => {
+        if (i.rarity === 'common' || i.rarity === 'uncommon' || user.inventory.includes(i.id)) { inspectableItems.push(i) }
+      })
 
-      if (query.length === 1) {
-        sendItemDetails(query[0], message, client)
+      if (inspectableItems.length === 1) {
+        sendItemDetails(inspectableItems[0], message, client)
       } else {
         const filterArray = []
-        const items = query.map(i => {
-          const index = query.indexOf(i)
+        const items = inspectableItems.map(i => {
+          const index = inspectableItems.indexOf(i)
           filterArray.push(index)
           return `**${index}** \`${i.name}\``
         })
@@ -28,11 +33,19 @@ module.exports = {
             message.channel.awaitMessages(itemInspectFilter, { max: 1, time: 30000, errors: ['time'] })
               .then(collected => {
                 const selectedItemIndex = Number(collected.first().content)
-                const selectedItem = query[selectedItemIndex]
+                const selectedItem = inspectableItems[selectedItemIndex]
                 sendItemDetails(selectedItem, message, client)
               })
           })
       }
+    } else {
+      let reply = 'You didn\'t provide any arguments.'
+
+      if (this.usage) {
+        reply += `\nThe proper usage would be: \`${config.prefix} ${this.name} ${this.usage}\``
+      }
+
+      return message.reply(reply)
     }
   }
 }
