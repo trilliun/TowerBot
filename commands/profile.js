@@ -11,7 +11,7 @@ registerFont('./resources/ST01R.ttf', { family: 'ST01R' })
 
 module.exports = {
   name: 'profile',
-  aliases: ['avatar', 'char', 'character'],
+  aliases: ['p', 'pf', 'avatar', 'char', 'character'],
   description: 'retrieve or edit a user\'s profile',
   usage: '[optional: set gender|skin|background]',
   cooldown: 10,
