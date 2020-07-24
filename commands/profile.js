@@ -4,6 +4,7 @@ const utility = require('../utility.js')
 const Image = require('../models/image.js')
 const config = require('../config.json')
 const CharacterComponent = require('../models/characterComponent.js')
+const PlayerLevel = require('../models/playerLevel.js')
 const { registerFont } = require('canvas')
 registerFont('./resources/VeniceClassic.ttf', { family: 'VeniceClassic' })
 registerFont('./resources/ST01R.ttf', { family: 'ST01R' })
@@ -37,7 +38,8 @@ module.exports = {
     };
 
     // start by creating the canvas
-    const canvas = await drawProfileCanvas(user, message)
+    const levelInfo = await PlayerLevel.find({ level: user.stats.level }).catch(err => console.log(err))
+    const canvas = await drawProfileCanvas(user, message, levelInfo[0])
 
     // create
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'character.png')
@@ -46,7 +48,7 @@ module.exports = {
   }
 }
 
-async function drawProfileCanvas (user, message) {
+async function drawProfileCanvas (user, message, levelInfo) {
   const canvas = Canvas.createCanvas(250, 300)
   const context = canvas.getContext('2d')
 
@@ -83,12 +85,37 @@ async function drawProfileCanvas (user, message) {
   const equipmentSlots = await Canvas.loadImage('https://i.imgur.com/xHt9PlG.png')
   context.drawImage(equipmentSlots, 0, 0, canvas.width, canvas.height)
 
-  // add name and info
+  // add name
   context.fillStyle = '#1f2235'
   context.fillRect(5, 10, canvas.width - 10, 40)
   context.font = '24pt VeniceClassic'
   context.fillStyle = '#c09141'
   context.fillText(message.author.username, 20, 40, canvas.width - 75)
+
+  // stats
+  context.fillStyle = '#403e3d'
+  context.lineWidth = 1
+  context.fillRect(130, 235, 100, 10)
+  context.fillRect(130, 255, 100, 10)
+  context.fillRect(130, 275, 100, 10)
+  context.fillStyle = '#ff3030' // health
+  context.fillRect(130, 235, Math.floor((user.stats.hp / levelInfo.hp) * 100), 10)
+  context.fillStyle = '#66fb11' // stamina
+  context.fillRect(130, 255, Math.floor((user.stats.stamina / levelInfo.stamina) * 100), 10)
+  context.fillStyle = '#ff1187' // exp
+  context.fillRect(130, 275, Math.floor((user.stats.exp / levelInfo.expToNextLvl) * 100), 10)
+  context.fillStyle = 'rgba(0,0,0, 0.75)'
+  context.font = '8pt ST01R'
+  context.fillText(`${user.stats.hp}/${levelInfo.hp}`, 135, 244, 95)
+  context.fillText(`${user.stats.stamina}/${levelInfo.stamina}`, 135, 264, 95)
+  context.fillText(`${user.stats.exp}/${levelInfo.expToNextLvl}`, 135, 284, 95)
+  context.fillStyle = '#FFF'
+  context.font = '10pt ST01R'
+  context.fillText(`LVL ${user.stats.level}`, 190, 38)
+  context.fillText(`ATK: ${user.stats.atk}`, 20, 245)
+  context.fillText(`DEF: ${user.stats.armor}`, 20, 265)
+  context.fillText(`LUCK: ${user.stats.luck}`, 20, 285)
+
   return canvas
 }
 
