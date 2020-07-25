@@ -13,7 +13,7 @@ module.exports = {
   name: 'profile',
   aliases: ['p', 'pf', 'avatar', 'char', 'character'],
   description: 'retrieve or edit a user\'s profile',
-  usage: '[optional: set gender|skin|background]',
+  usage: ['[set gender|skin|background | optional]'],
   cooldown: 10,
   async execute (client, user, message, args) {
     if (args && args[0] === 'set') {
@@ -41,9 +41,7 @@ module.exports = {
     const levelInfo = await PlayerLevel.find({ level: user.stats.level }).catch(err => console.log(err))
     const canvas = await drawProfileCanvas(user, message, levelInfo[0])
 
-    // create
     const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'character.png')
-
     message.channel.send(attachment)
   }
 }

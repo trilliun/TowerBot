@@ -4,22 +4,15 @@ const utility = require('../utility.js')
 const config = require('../config.json')
 const paginationEmbed = require('discord.js-pagination')
 
-const createEmbed = (message) => {
-  const color = '#DA70D6'
-
-  return new Discord.MessageEmbed()
-    .setColor(color)
-    .setAuthor(`${message.guild.name} Shop`, message.guild.iconURL())
-}
-
 module.exports = {
   name: 'shop',
   description: 'displays a list of items available in the general shop',
   cooldown: 5,
-  usage: ['[optional:page-number]', '[optional:item-category]'],
+  usage: ['[page-number | optional]', '[item-category | optional]'],
   async execute (client, user, message, args) {
     const pages = []
-    // find or create user profile
+
+    // get user's available money
     if (user.currency === 0) {
       var spend = '**no money**'
     } else {
@@ -28,23 +21,25 @@ module.exports = {
 
     var shopDescription = `Use command \`${config.prefix} buy [quantity] <item-name>\`\nto purchase an item from the shop.\n<@${message.author.id}> currently has ${spend} to spend.\n${'༞'.padEnd(35, '༞')}`
 
-    // get common items from database
+    // get common and uncommon items from database
     Item.find({ $or: [{ rarity: 'common' }, { rarity: 'uncommon' }] }).exec(async (err, itemsQuery) => {
       if (err) { console.log(err) }
       const itemGroups = new Map()
 
-      if (isNaN(args[0])) {
-        const iResult = []
-        itemsQuery.forEach(i => { if (i.category === args[0]) { iResult.push(i) } }) // assuming category is one word
-        if (iResult.length === 0) {
+      // if user passed a word argument instead of a page number
+      if (isNaN(args[0]) && args[0] !== undefined) {
+        const requestedCategory = []
+        itemsQuery.forEach(i => { if (i.category === args[0]) { requestedCategory.push(i) } }) // assuming category is one word
+        if (requestedCategory.length === 0) {
           message.reply('No items matched the category ' + args[0])
           return
         }
-        itemGroups.set(iResult[0].category, iResult)
+        itemGroups.set(requestedCategory[0].category, requestedCategory)
       } else {
+        // collect items from all available categories
         itemsQuery.forEach(i => {
           var item = i.toObject()
-  
+
           if (itemGroups.has(item.category)) {
             const group = itemGroups.get(item.category)
             group.push(item)
@@ -58,7 +53,7 @@ module.exports = {
       // for each category
       itemGroups.forEach((itemGroup, category, map) => {
         // create embed
-        let embed = createEmbed(message)
+        let embed = createShopEmbed(message)
         embed.setDescription(shopDescription)
 
         var cat = category.toUpperCase()
@@ -85,7 +80,7 @@ module.exports = {
             itemStr = []
           } // limit items to 10 max per page
           if (itemGroup.indexOf(groupItem) + 1 === 10) {
-            embed = createEmbed()
+            embed = createShopEmbed(message)
           }
         })
         pages.push(embed)
@@ -96,6 +91,7 @@ module.exports = {
       })
 
       if (args != null && args.length > 0) {
+        // if user requested a specific shop page number
         if (Number(args[0]) !== undefined) { var pageNumber = Number(args[0]) }
       }
       if (pages.length > 1 && pageNumber == null) {
@@ -109,4 +105,10 @@ module.exports = {
       }
     })
   }
+}
+
+function createShopEmbed (message) {
+  return new Discord.MessageEmbed()
+    .setColor('#DA70D6')
+    .setAuthor(`${message.guild.name} Shop`, message.guild.iconURL())
 }
