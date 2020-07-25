@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
   },
   inventory: [{
     item: { type: mongoose.Types.ObjectId, ref: 'Item' },
-    quantity: Number
+    qty: Number
   }],
   equipment: {
     head: { type: mongoose.Types.ObjectId, ref: 'Item', default: null },
