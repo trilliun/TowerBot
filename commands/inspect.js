@@ -6,15 +6,19 @@ const utility = require('../utility.js')
 module.exports = {
   name: 'inspect',
   description: 'displays the details and effects of an item',
-  aliases: ['i'],
-  usage: ['item'],
+  aliases: ['ins'],
+  usage: ['[item name]'],
   cooldown: 5,
   async execute (client, user, message, args) {
     if (args && args.length > 0) {
       const query = await Item.find({ name: { $regex: args.join(' ') } }).catch(err => console.log(err))
       const inspectableItems = []
+      const inventoryIds = []
+      user.inventory.map(i => inventoryIds.push(i.item.toString()))
+
+      console.log(inventoryIds)
       query.map(i => {
-        if (i.rarity === 'common' || i.rarity === 'uncommon' || user.inventory.includes(i.id)) { inspectableItems.push(i) }
+        if (i.rarity === 'common' || i.rarity === 'uncommon' || inventoryIds.includes(i._id.toString())) { inspectableItems.push(i) }
       })
 
       if (inspectableItems.length === 1) {
