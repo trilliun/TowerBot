@@ -61,7 +61,7 @@ module.exports = {
       if (user.stats.hp <= 0) {
         const rollForDisengage = utility.getRandomInt(21) + 1 + levelInfo.proficiencyModifier
         if (rollForDisengage > utility.getRandomInt(21)) {
-          battleLogMessage.push(`You were nearly defeated by ${creature.name}, but managed to flee in time! You have gained no exp.`)
+          battleLogMessage.push(`You were nearly defeated by the ${creature.name}, but managed to flee in time! You have gained no exp.`)
         } else {
           battleLogMessage.push(`You were defeated by the ${creature.name}! You lost a total of **${creature.exp}** exp.`)
 
@@ -94,7 +94,7 @@ module.exports = {
 
         user.stats.stamina -= creature.staminaCost
       }
-      battleLogMessage.push(`**Current Stats:**\n ${utility.getEmojiId('tbhealthpot2', client)} \`${user.stats.hp} / ${levelInfo.hp}\` ${utility.getEmojiId('tbstamina', client)} \`${user.stats.stamina} / ${levelInfo.stamina}\` ${utility.getEmojiId('tbexp', client)} \`${user.stats.exp} / ${levelInfo.expToNextLvl}\``)
+      battleLogMessage.push(`**Current Stats:**\n ${utility.getEmojiId('tbhealth', client)} \`${user.stats.hp} / ${levelInfo.hp}\` ${utility.getEmojiId('tbstamina', client)} \`${user.stats.stamina} / ${levelInfo.stamina}\` ${utility.getEmojiId('tbexp', client)} \`${user.stats.exp} / ${levelInfo.expToNextLvl}\``)
       await user.save()
       message.reply(battleLogMessage.join('\n'))
     }
@@ -117,7 +117,6 @@ function performBattle (battleOrder, user, creature, creatureHp, userProficiency
         let creatureAtkDmg = 0
         for (let index = 0; index < creatureAttack.dieCount; index++) { creatureAtkDmg += utility.getRandomInt(creatureAttack.dieSides) + 1 }
         creatureAtkDmg += creatureAttack.modifier
-        console.log(creatureAttack)
         // strike
         user.stats.hp -= creatureAtkDmg
         console.log(`creature hit user for ${creatureAtkDmg}. User health is now ${user.stats.hp}`)

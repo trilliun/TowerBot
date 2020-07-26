@@ -7,10 +7,11 @@ const itemSchema = mongoose.Schema({
   cost: Number,
   category: String,
   rarity: String,
+  statAffected: String,
   icon: String,
   roll: {
     dieCount: Number,
-    dieType: String,
+    dieSides: Number,
     modifier: Number
   }
 })
