@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const winston = require('winston')
-const config = require('./config.json')
+const config = require('./../config.json')
 
 const client = new Discord.Client()
 client.config = config

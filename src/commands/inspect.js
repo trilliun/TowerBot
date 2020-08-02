@@ -1,4 +1,4 @@
-const config = require('../config.json')
+const config = require('../../config.json')
 const Discord = require('Discord.js')
 const Item = require('../models/item.js')
 const utility = require('../utility.js')

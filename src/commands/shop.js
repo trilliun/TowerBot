@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const Item = require('../models/item.js')
 const utility = require('../utility.js')
-const config = require('../config.json')
+const config = require('../../config.json')
 const paginationEmbed = require('discord.js-pagination')
 
 module.exports = {
